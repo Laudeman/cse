@@ -1,0 +1,15 @@
+Script started on 2018-05-23 23:05:27-0700
+]0;bobby@blade: ~/Documents/lab8[01;32mbobby@blade[00m:[01;34m~/Documents/lab8[00m$ ./a.outg++ MapMain.cpp [9P./a.outg++ BinarySearchTreeMain.cpp cd lab6/[Kg++ BinarySearchTreeMain.cpp ./a.out[Kg++ MapMain.cpp [9P./a.outg++ MapMain.cpp [9P./a.outg++ BinarySearchTreeMain.cpp cd lab6/[KDesktop/[3Plab6/g++ BinarySearchTreeMain.cpp ./a.out[Kg++ MapMain.cpp [9P./a.out[K./a.outg++ MapMain.cpp -o Map
+]0;bobby@blade: ~/Documents/lab8[01;32mbobby@blade[00m:[01;34m~/Documents/lab8[00m$ ./Map
+cheese:10
+egg:6
+
+
+egg:6
+
+
+Segmentation fault (core dumped)
+]0;bobby@blade: ~/Documents/lab8[01;32mbobby@blade[00m:[01;34m~/Documents/lab8[00m$ exit
+exit
+
+Script done on 2018-05-23 23:06:01-0700

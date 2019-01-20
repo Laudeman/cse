@@ -1,0 +1,15 @@
+#!/bin/bash
+#Title: Script Assignment 3.1
+#Date: October 10, 2017
+#Author: Bobby Laudeman
+#Description: This script will check to see if the user input is a number between 20 and 30.
+#Option: None
+
+printf  "Please enter a number between 20 and 30: "
+
+read input
+
+if ["$input" -ge 20 && "$input" -le 30]
+then
+	break;
+fi	

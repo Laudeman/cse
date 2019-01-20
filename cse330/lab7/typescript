@@ -1,0 +1,53 @@
+Script started on 2018-05-24 23:12:12-0700
+]0;bobby@blade: ~/Documents/lab7[01;32mbobby@blade[00m:[01;34m~/Documents/lab7[00m$ ./bnt g++ HW3.cpp -o bnt
+]0;bobby@blade: ~/Documents/lab7[01;32mbobby@blade[00m:[01;34m~/Documents/lab7[00m$ g++ HW3.cpp -o bnt[12P./bnt 
+Integer: 5
+
+Integer: 3
+
+Integer: 6
+
+Integer: 32
+
+Integer: 4
+
+Integer: 1
+
+Integer: 8
+
+Integer: 9
+
+Integer: 44
+
+Integer: 33
+
+
+Values entered
+1
+3
+4
+5
+6
+8
+9
+32
+33
+44
+
+5
+..3
+....1
+....4
+..6
+....32
+......8
+........9
+......44
+........33
+
+
+And with iterators ...
+1
+1
+1
+1
