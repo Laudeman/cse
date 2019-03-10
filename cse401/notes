@@ -1,0 +1,13 @@
+pg. 301 - 302
+-op codes for control unit in lab 2
+
+5 stage pipeline -> 5 cycles (latency)
+
+1ghz -> each cycle is 1ns (bandwidth)
+
+IDOD instructions take - at cpi = 1
+
+Latency - Time to do 1 thing
+Bandwidth - # of things / time
+
+Time = Latency + Data Size (# instructions) / Frequency
