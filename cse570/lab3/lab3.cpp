@@ -51,7 +51,7 @@ bool firstProduction = false;
 int followCounter = 0;
 
 void printSets();
-bool isTerminal(string val);
+bool isATerminal(string val);
 void first_function(string input);
 void follow_function(string input);
 void canonical(string input);
@@ -136,12 +136,7 @@ void printSets() {
 }
 
 
-// * Terminals
-// A terminal is a symbol which does not appear on the left-hand side of any production. 
-// A grammar contains a set of terminal symbols (tokens) such as the plus sign, +, the times sign, *, and other tokens defined by the lexical analyzer such as Identifiers
-// * Nonterminals
-// Nonterminals are the non-leaf nodes in a parse tree. In the Expression grammar, E, T, and F are nonteminals. Sometimes nonterminals are enclosed bewteen angle brackets to distinguish them from terminals.
-bool isTerminal(string val){
+bool isATerminal(string val){
 	char c=val[0];
 	// Test if the character is lowercase
 	if ((!isupper(c) && val.length() == 1) || (val.substr(1,2) != PRODUCTION_ARROW)) {
@@ -157,17 +152,6 @@ bool isTerminal(string val){
 	}
 }
 
-/*
-FIRST function is used to find out the terminal symbols that are possible from both terminal and non-terminal symbols. 
-The application of this function is widely seen in designing the Predictive parser tables that are used in designing compilers for various languages. 
-Even the first compiler C, has an in built predictive parser which is operated through the calculation of the first and follow functions.
-FIRST function is applied to both terminal symbols and non-terminal symbols such that its definition has certain rules to be employed. They are as follows:
-
-1)FIRST of any terminal symbol ‘a’ is the terminal ‘a’ itself.
-2)FIRST of non terminal ‘A’ = FIRST of ‘@’, where A -> @ such that @ is a string containing terminals and non-terminals.
-
-FIRST of any entinty is given by FIRST(a) for terminal ‘a’ and FIRST(A) for non-terminal ‘A’. The following program code simulates and computes the FIRST of the Grammar defined by the user at the compile time.
-*/
 void first_function(string input) {
 	// FIRST of a single symbol. 
 	// First(a) = set of terminals that start string of terminals derived from a.
@@ -177,7 +161,7 @@ void first_function(string input) {
 
 
 	// Rule 1: The First of a terminal is that terminal. We must ignore items larger in size than 1 and delimiters.
-	if(isTerminal(current)){
+	if(isATerminal(current)){
 		char c = current[0];
 		if (!isupper(c) && current.length() == 1 && current != DELIM) {
 			first_set.push_back(current);
@@ -228,13 +212,7 @@ void first_function(string input) {
 			}
 
 		
-			// Rule 3: If X is nonterminal and X ÆY1 Y2 ... Yk. is a production, then place a in FIRST(X) if for some i, a is in
-			// FIRST(Yi), and e is in all of FIRST(Y1), ... , FIRST(Yi-1); that is, Y1, ... ,Yi-1 fi e. If e is in FIRST(Yj) for
-			// all j = 1, 2, ... , k, then add e to FIRST(X). For example, everything in FIRST(Y1) is surely in
-			// FIRST(X). If Y1 does not derive e, then we add nothing more to FIRST(X), but if Y1fi e, then we add
-			// FIRST(Y2) and so on.
-
-			// For future use. When looking for more than one option of the form: S->B|A
+	
 			if (current.find("|") != std::string::npos) {
 				cout << endl << "|" << endl;
 			}
@@ -244,21 +222,14 @@ void first_function(string input) {
 }
 
 void follow_function(string input) {
-	// FOLLOW function is used to find out the following symbols that are possible from both terminal and non-terminal symbols and these are the symbols that lead the next variables into the operation being done. 
-	// The application of this function is widely seen in designing the Predictive parser tables that are used in designing compilers for various languages. Even the first compiler C, 
-	// has an in built predictive parser which is operated through the calculation of the first and follow functions.
-	// 1)FOLLOW of any non-terminal symbol ‘A’ is ‘$’ iff A is the Starting symbol of the Grammar.
-	// 2)FOLLOW of non terminal ‘B’ = FIRST of ‘@’, where A -> @B& such that ‘@’ and ‘&’ is a string containing terminals and non-terminals with FIRST (B) not containing EPSILON (e). 
-	// 3)FOLLOW of non terminal ‘B’ = FOLLOW of ‘A’, where A -> @B& such that ‘@’ and ‘&’ is a string containing terminals and non-terminals with FIRST (B) contains EPSILON (e).
-
-	// FOLLOW of any entinty is given by FOLLOW(A) for non-terminal ‘A’. The following program code simulates and computes the FOLLOW of the Grammar defined by the user at the compile time.
+	
 	string current = input;
 	string left_hand_side_string, right_hand_side_string;
 
 	left_hand_side_string = current.substr(0,1);
 
 
-	if (!isTerminal(input)) {
+	if (!isATerminal(input)) {
 		cout << input << endl;
 	}
 	
@@ -282,93 +253,3 @@ void follow_function(string input) {
 	right_hand_side_string = current.substr(3,6);
 	}
 }
-
-
-void canonical(string input) {
-	/*
-  std::set<char> symbols;
-  auto current_item = Item(getStartProduction(), START_POS);
-  auto current_closure = findClosure({current_item});
-  _canon.insert(LRSet(current_closure, 0, '\0'));
-  symbols = setUnion(_terminals, _non_terminals);
-  int counter = 1;
-  bool changed;
-  do {
-    changed = false;
-    for (auto item : _canon) {
-      for (auto symbol : symbols) {
-        auto new_set = findGoto(item.data, symbol);
-        if (!new_set.empty() && !isIn(_canon, new_set)) {
-          _canon.insert({new_set, counter, symbol});
-          changed = true;
-          ++counter;
-        }
-      }
-    }
-  } while (changed);
-  */
-
-
-  
-}
-
-
-/*
-g417 Grammer Output:
---------------------
-
-First Set
-
-Non-Terminal Symbol		First Set
-TD						TD
-+TD						+TD
-e						e
-FU						FU
-*FU						*FU
-(E)						(E)
-x						x
-y						y
-z						z
-E						TD
-D						+TD, e
-T						FU
-U						*FU, e
-F						(E), x, y, z
-I						x, y, z
-
-Follow Set
-
-Non-Terminal Symbol		Follow Set
-E						$
-D	
-T	
-U	
-F	
-I	
-
-Predict Set
-#	Expression	Predict
-1	E → TD		TD
-2	D → +TD		+TD
-3	D → e		e
-4	T → FU		FU
-5	U → *FU		*FU
-6	U → e		e
-7	F → (E)		(E)
-8	F → I		x, y, z
-9	I → x		x
-10	I → y		y
-11	I → z		z
-
-
-Terminals
-A terminal is a symbol which does not appear on the left-hand side of any production. A grammar contains a set of terminal symbols (tokens) such as the plus sign, +, the times sign, *, and other tokens defined by the lexical analyzer such as Identifiers
-
-Nonterminals
-Nonterminals are the non-leaf nodes in a parse tree. In the Expression grammar, E, T, and F are nonteminals. Sometimes nonterminals are enclosed bewteen angle brackets to distinguish them from terminals.
-
-
-
-
-
-*/
