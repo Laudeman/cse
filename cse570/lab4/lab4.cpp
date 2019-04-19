@@ -15,17 +15,17 @@
 using namespace std;
 
 int length;
-char arry[20][20];
-char arry1[20][20];
-bool vt[100];//judge whether it is terminal after dot
-bool vn[100];//judge whether it is non-terminal after dot
-char left_vn[100];//record left grammar symbols
-bool flag[100];//non-terminal symbol
-char right_rule[100];//the first non-terminal after dot
-char I[40][40];//to store canonical sets
+char a[20][20];
+char a1[20][20];
+bool vt[100];
+bool vn[100];
+char left[100];
+bool flag[100];
+char rule[100];
+char I[40][40];
 char I1[40][40];
 char vn1[100];
-int record_arry[100];
+int record_a[100];
 bool f[100];
 int cnt_i;
 queue<int>q;
@@ -37,8 +37,8 @@ int init(){
         printf("The file grammar.txt is not exist!\n");
         return -1;
     }
-    while (fscanf(fp, "%s", arry[i]) != EOF){
-        puts(arry[i++]);
+    while (fscanf(fp, "%s", a[i]) != EOF){
+        puts(a[i++]);
         length++;
     }
     fclose(fp);
@@ -47,37 +47,37 @@ int init(){
 void left(){
     int i = 1;
     for (i; i < length; i++){
-        left_vn[i] = arry[i][0];
+        left[i] = a[i][0];
     }
 }
 
 void insert(int tmp,int pos){
     int i = 0;
     for (i; i < length; i++){
-        strcpy(arry1[i],arry[i]);
+        strcpy(a1[i],a[i]);
     }
-    for (i = strlen(arry1[tmp]); i > pos; i--){
-        arry1[tmp][i] = arry1[tmp][i-1];
+    for (i = strlen(a1[tmp]); i > pos; i--){
+        a1[tmp][i] = a1[tmp][i-1];
     }
-    arry1[tmp][i] = '.';
-    if (arry1[tmp][pos+1] >= 'A' && arry1[tmp][pos+1] <= 'Z'){
+    a1[tmp][i] = '.';
+    if (a1[tmp][pos+1] >= 'A' && a1[tmp][pos+1] <= 'Z'){
         flag[tmp] = true;
-        right_rule[tmp] = arry1[tmp][pos+1];
+        rule[tmp] = a1[tmp][pos+1];
     }
 }
 
 void closure_init(int tmp,int cnt){
     insert(tmp,3);
-    strcpy(I[cnt],arry1[tmp]);
-    strcpy(I1[cnt],arry1[tmp]);
+    strcpy(I[cnt],a1[tmp]);
+    strcpy(I1[cnt],a1[tmp]);
     cnt++;
     if (flag[tmp] == true){
         int i = 1;
         for (i; i < length; i++){
-            if (right_rule[tmp] == left_vn[i]){
+            if (rule[tmp] == left[i]){
                 insert(i,3);
-                strcpy(I[cnt],arry1[i]);
-                strcpy(I1[cnt],arry1[i]);cnt++;
+                strcpy(I[cnt],a1[i]);
+                strcpy(I1[cnt],a1[i]);cnt++;
             }
         }
         cnt_i = cnt;
@@ -170,7 +170,7 @@ void closure()
             int j = 1;
             for (j; j < length; j++)
             {
-                if (vn1[i] == left_vn[j])
+                if (vn1[i] == left[j])
                 {
                     closure_init(j,tmp);
                     tmp = tmp + 1;
@@ -222,7 +222,7 @@ void closure()
                     int j = 1;
                     for (j; j < length; j++)
                     {
-                        if (vn1[i] == left_vn[j])
+                        if (vn1[i] == left[j])
                         {
                             closure_init(j,cal);
                             cal = cal + 1;
@@ -254,7 +254,6 @@ int main ()
     left();
 
     closure();
-//system("pause");
     return 0;
 }
 

@@ -15,10 +15,10 @@
 
 using namespace std;
 
-class GReader
+class GrammarReader
 {
 public :
-void readGram(string filename);
+void getGrammar(string filename);
 bool is_term(char x);
 bool is_nonterm(char x);
 void first();
@@ -35,8 +35,8 @@ vector<char> allPos;
 vector< set<char> > inFirsts;
 vector< set<char> > inFollows;
 };
-//Fucntion to read a file holding grammar
-void GReader::readGram(string filename)
+
+void GrammarReader::getGrammar(string filename)
 {
 	string line;
 	ifstream file (filename);
@@ -44,7 +44,7 @@ void GReader::readGram(string filename)
 		cout<<"Error! File may not exist.\n";
 		exit(1);
 	}
-	///code to fill vectors
+	///fill vectors
 	int count = 0;
 	getline(file, line);
 	if(count == 0){
@@ -77,7 +77,7 @@ void GReader::readGram(string filename)
 		allPos.push_back(nonterms[i]);
 	}//allPos now has all terminals and nonterminals
 }
-/*void GReader::prints()
+/*void GrammarReader::prints()
 {
 	for(int i = 0; i < terminals.size();i++){
 		cout << terminals[i] << endl;
@@ -96,7 +96,7 @@ void GReader::readGram(string filename)
 	}
 }*/
 //Function to check if given character is a terminal
-bool GReader::is_term(char x)
+bool GrammarReader::is_term(char x)
 {
 	for(int i = 0; i < terminals.size(); i++){
 		if(x == terminals[i]){
@@ -106,7 +106,7 @@ bool GReader::is_term(char x)
 	return false;
 }
 //Function to check if the given character is a nonterminal
-bool GReader::is_nonterm(char x)
+bool GrammarReader::is_nonterm(char x)
 {
 	for(int i =0; i < nonterms.size();i++){
 		if(x == nonterms[i]){
@@ -115,7 +115,7 @@ bool GReader::is_nonterm(char x)
 	}
 	return false;
 }
-void GReader::first(){
+void GrammarReader::first(){
 	set<char> temp;
 	int start = 0;
 	int end = 0;
@@ -138,7 +138,7 @@ void GReader::first(){
 	}
 	while(start!=end);
 }
-set<char> GReader::go_first(char x){
+set<char> GrammarReader::go_first(char x){
 //rules for algorithm from:
 //www.jambe.co.nz/UNI/FirstAndFollowsSets.html
 	set<char> temp;
@@ -169,7 +169,7 @@ set<char> GReader::go_first(char x){
 	return temp;
 }
 //Function to output FIRST
-void GReader::printFirst(){
+void GrammarReader::printFirst(){
 	cout << "FIRSTS\n";
 	for(int i = 0; i < inFirsts.size();i++){
 		cout << allPos[i] << " = ";
@@ -179,7 +179,7 @@ void GReader::printFirst(){
 		cout << endl;
 	}
 }
-void GReader::follows()//rules for algorithm from: 
+void GrammarReader::follows()//rules for algorithm from: 
 {////////////////////////www.jambe.co.nz/UNI/FirstAndFollowsSets.html
 	set<char> temp;
 	for(int i = 0; i < nonterms.size();i++){
@@ -264,7 +264,7 @@ void GReader::follows()//rules for algorithm from:
 	}
 }
 //Function to output FOLLOWS
-void GReader::printFollows(){
+void GrammarReader::printFollows(){
 	cout << "FOLLOWS\n";
 	for(int i = 0; i < inFollows.size();i++){
 		cout << nonterms[i] << " = ";
@@ -277,9 +277,9 @@ void GReader::printFollows(){
 
 int main(){
 
-	GReader lab2;
-	//lab2.readGram("g417");
-	lab2.readGram("g419");
+	GrammarReader lab2;
+	lab2.getGrammar("g417");
+	lab2.getGrammar("g419");
 	lab2.first();
 	lab2.printFirst();
 	lab2.follows();
