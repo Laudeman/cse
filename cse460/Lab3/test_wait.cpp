@@ -10,7 +10,7 @@ using namespace std;
 
 int main()
 {
-  pid_t pid;		//process id
+  pid_t pid, childPid;		//process id
   char *message;
   int n;
   int exit_code;
@@ -22,10 +22,19 @@ int main()
     cout << "Fork failure!\n";
     return 1;
   case 0:
-    message = "This is the child\n";
-    n = 5;
-    exit_code = 9;
-    break;
+    if (childPid == 0)
+    {
+      message = "This is the grandchild\n";
+      n = 7;
+      exit_code = 18;
+    }
+    else
+    {
+      message = "This is the child\n";
+      n = 5;
+      exit_code = 9;
+    }
+   break;
   default:
     message = "This is the parent\n";
     n = 3;
@@ -35,6 +44,23 @@ int main()
   for ( int i = 0; i < n; ++i ) {
     cout << message;
     sleep ( 1 );
+  }
+
+  //waiting for grandchild to finish
+  if (childPid != 0)
+  {
+    int stat_val;
+    pid_t grandchild_pid;
+
+    grandchild_pid = wait (&stat_val);
+    cout << "Grandchild finished: PID = " << grandchild_pid << endl;
+    cout << "Grandchild finished: PPID = " << getpid() << endl;
+    cout << "Grandchild finished: GPPID = " << getppid() << endl;
+    
+    if ( WIFEXITED ( stat_val ) )
+ 	    cout << "Grandchild exited with code " << WEXITSTATUS ( stat_val ) << endl;
+    else
+	    cout << "child terminated abnormally!" << endl;
   }
 
   //waiting for child to finish
