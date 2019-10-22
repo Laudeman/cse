@@ -1,0 +1,95 @@
+
+
+int newfile(string file)
+{
+    for (int i = 0; i < rootsize; i++)
+    {
+        if (filename[i] == file)
+        {
+            cout << "file exists";
+            return 0;
+        }
+    }
+}
+
+int rmfile(string file)
+{
+    for (int i = 0; i < rootsize; i++)
+    {
+        if (filename[i] == file)
+        if (firstblock[i] != 0)
+        {
+            cout << "file is not empty";
+            return 0;
+        }
+        else 
+        {
+            filename[i] == "x....x";
+            fssynch();
+            return 1;
+        }
+    }
+    cout << "file does not exist";
+    return 0;
+}
+
+int getfirstblock(string file)
+{
+   for (int i = 0; i < rootsize; i++)
+   {
+       if (filename[i] == file)
+       {
+           return firstblock[i];
+       }
+       // cout << "no such file";
+       return -1;
+   } 
+}
+
+int addblock(string file, buffer)
+{
+    int first == getfirstblock(file);
+    if (first == -1)
+    {
+        return 0;
+    }
+    int allocate = fat[0];
+    if (allocate == 0)
+    {
+        //no free blocks
+        return 0;
+    }
+    
+    fat[0] = fat[fat[0]];
+    fat[allocate] = 0; 
+}
+
+if (first == 0)
+{
+    for (int i = 0; i < rootsize; i++)
+    {
+        if (filename[i] == file)
+        {
+            firstblock[i] = allocate;
+            fssynch();
+            putblock(allocate, buffer);
+            return allocate;
+        }
+        
+    }
+    
+}
+else
+{
+    // not empty
+    int block = first;
+    while (fat[block] != 0)
+    {
+        block = fat[block];
+    }
+    fat[block] = 0; 
+    fssynch();
+    putblock(allocate, buffer);
+    return allocate;
+}
+
