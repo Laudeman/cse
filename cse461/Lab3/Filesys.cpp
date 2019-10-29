@@ -124,6 +124,15 @@ int Filesys::newfile(string file)
             cout << "file exists";
             return 0;
         }
+        else
+        {
+            filename[i] = "xxxxxxxx";
+            fssynch();
+            return 1;
+        }
+
+        cout << " the file does not exist ";
+        return 0; 
     }
 }
 
@@ -208,4 +217,63 @@ int Filesys::addblock(string file, string buffer)
   
 }
 
+int Filesys::delblock(string file, int blocknumber)
+{
+    if (!checkblock(file, blocknumber))
+    {
+        return 0;
+    }
+    int deallocate = blocknumber;
+    if (blocknumber == getfirstblock(file))
+    {
+        for (int i = 0; i < filename.size(); i++)
+        {
+            if (file == filename[i])
+            {
+                firstblock[i] = fat[blocknumber];
+            }
+            
+        }
+        
+    }
+    else
+    {
+        int iblock = getfirstblock(file);
+        while (fat[iblock] != blocknumber)
+        {
+            iblock = fat[iblock];
+        }
 
+        fat[iblock] == fat[blocknumber];
+        
+    }
+    
+    
+    
+}
+
+int Filesys::readblock(string file, int blocknumber, string& buffer)
+{
+    if (checkblock(file, blocknumber))
+    {
+        getblock(blocknumber, buffer);
+        return -1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int Filesys::nextblock(int file, int blocknumber)
+{
+    if (checkblock(file, blocknumber))
+    {
+        return fat[blocknumber];
+    }
+    else
+    {
+        return -1;
+    }
+    
+}
