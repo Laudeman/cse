@@ -8,6 +8,7 @@
 class Filesys: public Sdisk {
     public:
         Filesys(string diskname, int numberofblocks, int blocksize);
+        int fsclose();
         int fssynch();
         int newfile(string file);
         int rmfile(string file);
