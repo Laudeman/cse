@@ -205,7 +205,87 @@ int Filesys::addblock(string file, string buffer)
         putblock(allocate, buffer);
         return allocate;
     }
-  
+ 
+}
+    
+int Filesys::delblock(string file, int blocknumber)
+{
+    if (!checkblock(file, blocknumber))
+    {
+        return 0;
+    }
+    int deallocate = blocknumber;
+    if (blocknumber == getfirstblock(file))
+    {
+        for (int i = 0; i < filename.size(); i++)
+        {
+            if (file == filename[i])
+            {
+                firstblock[i] = fat[blocknumber];
+                break;
+            }
+            else
+            {
+                int iblk = getfirstblock(file);
+                while (fat[iblk] != blocknumber)
+                {
+                    iblk = fat[iblk];
+                }
+                if (fat[iblk] == blocknumber)
+                {
+                    fat[iblk] = fat[blocknumber];
+                }
+                
+                
+            }
+            fat[blocknumber] = fat[0];
+            fat[0] = blocknumber;
+            fssynch();
+        }
+        
+    }
+     
+}
+
+int Filesys::checkblock(string file, int blocknumber)
+{
+    int iblk = getfirstblock(file);
+    while (iblk != 0)
+    {
+        if (iblk == blocknumber)
+        {
+            return true;
+        }
+        iblk = fat[iblk];
+        return false;
+    }
+
+} 
+
+
+int Filesys::readblock(string file, int blocknumber, string& buffer)
+{
+    if (checkblock(file, blocknumber))
+    {
+        return getblock(blocknumber, buffer);
+    }
+    else
+    {
+        return 0;
+    }
+    
 }
 
 
+int Filesys::nextblock(string file, int blocknumber)
+{
+    if (checkblock(file, blocknumber))
+    {
+        return fat[blocknumber];
+    }
+    else
+    {
+        return -1;
+    }
+    
+}
