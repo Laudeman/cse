@@ -29,8 +29,7 @@ Filesys::Filesys(string diskname, int numberofblocks, int blocksize): Sdisk(disk
 
        output << fatsize + 2 << " ";
        fat.push_back(fatsize + 2);
-       fat.push_back(0);
-       for (int i = 0; i < fatsize; ++i) {
+       for (int i = 1; i < fatsize + 2; ++i) {
            output << 0 << " ";
            fat.push_back(0);
        }
@@ -125,15 +124,16 @@ int Filesys::newfile(string file)
             cout << "file exists";
             return 0;
         }
-        else if(filename[i] == "XXXXX")
+        else
         {
-            filename[i] = file;
+            filename[i] = "xxxxxxxx";
             fssynch();
             return 1;
         }
+
+        cout << " the file does not exist ";
+        return 0; 
     }
-    cout << " the file does not exist ";
-    return 0; 
 }
 
 int Filesys::rmfile(string file)
@@ -166,26 +166,25 @@ int Filesys::getfirstblock(string file)
            return firstblock[i];
        }
        // cout << "no such file";
-       
+       return -1;
    } 
-   return -1;
 }
 
 int Filesys::addblock(string file, string buffer)
 {
-    int first = getfirstblock(file); // 0
+    int first = getfirstblock(file);
     if (first == -1)
     {
         return 0;
     }
-    int allocate = fat[0]; // 13
+    int allocate = fat[0];
     if (allocate == 0)
     {
         //no free blocks
         return 0;
     }
     
-    fat[0] = fat[fat[0]]; // 14
+    fat[0] = fat[fat[0]];
     fat[allocate] = 0; 
     if (first == 0)
     {
@@ -210,12 +209,11 @@ int Filesys::addblock(string file, string buffer)
         {
             block = fat[block];
         }
-        fat[block] = allocate; 
+        fat[block] = 0; 
         fssynch();
         putblock(allocate, buffer);
         return allocate;
     }
-    return allocate;
  
 }
     
@@ -235,27 +233,27 @@ int Filesys::delblock(string file, int blocknumber)
                 firstblock[i] = fat[blocknumber];
                 break;
             }
-            
+            else
+            {
+                int iblk = getfirstblock(file);
+                while (fat[iblk] != blocknumber)
+                {
+                    iblk = fat[iblk];
+                }
+                if (fat[iblk] == blocknumber)
+                {
+                    fat[iblk] = fat[blocknumber];
+                }
+                
+                
+            }
+            fat[blocknumber] = fat[0];
+            fat[0] = blocknumber;
+            fssynch();
         }
         
     }
-    else
-    {
-        int iblk = getfirstblock(file);
-        while (fat[iblk] != blocknumber)
-        {
-            iblk = fat[iblk];
-        }
-        if (fat[iblk] == blocknumber)
-        {
-            fat[iblk] = fat[fat[iblk]];
-        }
-        
-        
-    }
-    fat[blocknumber] = fat[0];
-    fat[0] = blocknumber;
-    fssynch();
+     
 }
 
 bool Filesys::checkblock(string file, int blocknumber)

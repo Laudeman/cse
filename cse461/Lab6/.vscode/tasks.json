@@ -7,7 +7,7 @@
             "label": "build c++",
             "type": "shell",
             "command": "g++",
-            "args": ["-g", "-o", "main", "main.cpp", "Filesys.cpp", "sdisk.cpp"],
+            "args": ["-g", "-o", "main", "Filesys.cpp", "sdisk.cpp"],
             "group": {
                 "kind": "build",
                 "isDefault": true
