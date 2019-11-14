@@ -6,19 +6,19 @@ int Shell::copy(string file1, string file2)
     if (code == -1)
     {
         cout << "file does not exist";
-        return 0;
+        return -1;
     }
     int code2 = getfirstblock(file2);
-    if (code != -1)
+    if (code2 != -1)
     {
-        cout << "file exists";
-        return 0;
+        cout << "file2 already exists";
+        return -1;
     }
     int code3 = newfile(file2);
     if (code3 == 0)
     {
         cout << "no space on root";
-        return 0;
+        return -1;
     }
     
 
@@ -32,7 +32,7 @@ int Shell::copy(string file1, string file2)
        {
            cout << "no space left";
            del(file2);
-           return 0;
+           return -1;
        }
        iblock = nextblock(file1, iblock);
        
