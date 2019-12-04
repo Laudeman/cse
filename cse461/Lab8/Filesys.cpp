@@ -1,6 +1,6 @@
 #include "Filesys.h"
 
-Filesys::Filesys(string diskname, int numberofblocks, int blocksize): Sdisk(diskname, numberofblocks, blocksize) {
+Filesys::Filesys(string diskname, int numberofblocks, int blocksize):Sdisk(diskname, numberofblocks, blocksize) {
    rootsize = getblocksize()/11;
    fatsize = (getnumberofblocks()*5)/getblocksize() + 1;
   
